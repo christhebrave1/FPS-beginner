@@ -23,6 +23,12 @@ public class Player : MonoBehaviour
     {
         PlayerMovement();
 
+        CameraMovement();
+
+    }
+
+    private void CameraMovement()
+    {
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
@@ -31,7 +37,6 @@ public class Player : MonoBehaviour
 
         transform.Rotate(Vector3.up * mouseX);
         myCameraHead.localRotation = Quaternion.Euler(cameraVerticalRotation, 0f, 0f);
-
     }
 
     void PlayerMovement()
