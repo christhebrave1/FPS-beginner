@@ -36,6 +36,23 @@ public class Player : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            RaycastHit hit;
+
+            if(Physics.Raycast(myCameraHead.position, myCameraHead.forward, out hit, 100f))
+            {
+                if(Vector3.Distance(myCameraHead.position, hit.point) > 2f)
+                {
+                
+                    firePosition.LookAt(hit.point);
+
+                }
+
+            }
+            else
+            {
+                firePosition.LookAt(myCameraHead.position + (myCameraHead.forward * 50f));
+            }
+
             Instantiate(bullet, firePosition.position, firePosition.rotation);
         }
     }
