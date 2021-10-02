@@ -28,10 +28,16 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
     public float groundDistance = 0.5f;
 
+    // crouching
+    private Vector3 crouchScale = new Vector3(1, 0.5f, 1);
+    private Vector3 playerScale;
+    public float crouchSpeed = 6f;
+    private bool isCrouching = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerScale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -45,6 +51,29 @@ public class Player : MonoBehaviour
 
         Shoot();
 
+        Crouching();
+
+    }
+
+    private void Crouching()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+            StartCrouching();
+
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
+            StopCrouching();
+    }
+
+    private void StartCrouching()
+    {
+        transform.localScale = crouchScale;
+        isCrouching = true;
+    }
+
+    private void StopCrouching()
+    {
+        transform.localScale = playerScale;
+        isCrouching = false;
     }
 
     void Jump()
@@ -120,7 +149,17 @@ public class Player : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 movement = x * transform.right + z * transform.forward;
-        movement = movement * speed * Time.deltaTime;
+
+        if(isCrouching)
+        {
+            movement = movement * crouchSpeed * Time.deltaTime;
+        }
+        else
+        {
+        
+            movement = movement * speed * Time.deltaTime;
+
+        }
 
         myController.Move(movement);
 
