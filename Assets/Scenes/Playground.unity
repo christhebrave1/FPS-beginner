@@ -1428,6 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12.5
+  runSpeed: 50
   velocity: {x: 0, y: 0, z: 0}
   gravityModifier: 20
   myController: {fileID: 1104770861}
