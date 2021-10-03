@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 
     public CharacterController myController;
     public Transform myCameraHead;
+    public Animator myAnimator;
 
     public float mouseSensitivity = 100f;
     private float cameraVerticalRotation;
@@ -169,6 +170,10 @@ public class Player : MonoBehaviour
             movement = movement * speed * Time.deltaTime;
 
         }
+
+        myAnimator.SetFloat("PlayerSpeed", movement.magnitude);
+
+        Debug.Log(movement.magnitude);
 
         myController.Move(movement);
 
