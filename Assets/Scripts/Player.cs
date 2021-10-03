@@ -37,6 +37,12 @@ public class Player : MonoBehaviour
     public float crouchSpeed = 6f;
     private bool isCrouching = false;
 
+    // sliding
+    private bool isRunning = false, startSliderTimer;
+    private float currentSliderTimer, maxSlideTimer = 2f;
+    public float slideSpeed = 30f;
+   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,11 +63,13 @@ public class Player : MonoBehaviour
 
         Crouching();
 
+        SlideCounter();
+
     }
 
     private void Crouching()
     {
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.LeftAlt) || currentSliderTimer > maxSlideTimer)
             StartCrouching();
 
         if (Input.GetKeyUp(KeyCode.LeftAlt))
@@ -75,10 +83,20 @@ public class Player : MonoBehaviour
         myController.height /= 2;
 
         isCrouching = true;
+
+        if(isRunning)
+        {
+            velocity = Vector3.ProjectOnPlane(myCameraHead.transform.forward, Vector3.up).normalized * slideSpeed * Time.deltaTime;
+            startSliderTimer = true;
+        }
     }
 
     private void StopCrouching()
     {
+        currentSliderTimer = 0f;
+        velocity = new Vector3(0f, 0f, 0f);
+        startSliderTimer = false;
+
         myBody.localScale = bodyScale;
         myCameraHead.position += new Vector3(0, 1f, 0);
         myController.height = initialControllerHeight;
@@ -163,6 +181,7 @@ public class Player : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouching)
         {
             movement = movement * runSpeed * Time.deltaTime;
+            isRunning = true;
         }
 
         else if(isCrouching)
@@ -173,6 +192,7 @@ public class Player : MonoBehaviour
         {
         
             movement = movement * speed * Time.deltaTime;
+            isRunning = false;
 
         }
 
@@ -191,5 +211,13 @@ public class Player : MonoBehaviour
 
         myController.Move(velocity);
 
+    }
+
+    private void SlideCounter()
+    {
+        if(startSliderTimer)
+        {
+            currentSliderTimer += Time.deltaTime;
+        }
     }
 }
