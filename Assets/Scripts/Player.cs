@@ -17,10 +17,10 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 100f;
     private float cameraVerticalRotation;
 
-    public GameObject bullet;
-    public Transform firePosition;
+    
+    
 
-    public GameObject muzzleFlash, bulletHole, waterLeak;
+    
 
     // jumping
     public float jumpHeight = 10f;
@@ -58,8 +58,6 @@ public class Player : MonoBehaviour
         CameraMovement();
 
         Jump();
-
-        Shoot();
 
         Crouching();
 
@@ -116,48 +114,7 @@ public class Player : MonoBehaviour
         myController.Move(velocity);
     }
 
-    private void Shoot()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-
-            if(Physics.Raycast(myCameraHead.position, myCameraHead.forward, out hit, 100f))
-            {
-                if(Vector3.Distance(myCameraHead.position, hit.point) > 2f)
-                {
-                
-                    firePosition.LookAt(hit.point);
-
-                    if(hit.collider.tag == "Shootable")
-                    {
-                    
-                        Instantiate(bulletHole, hit.point, Quaternion.LookRotation(hit.normal));
-
-                    }
-                    if(hit.collider.CompareTag("WaterLeaker"))
-                    {
-                        Instantiate(waterLeak, hit.point, Quaternion.LookRotation(hit.normal));
-                    }
-
-                    if(hit.collider.CompareTag("Enemy"))
-                    {
-                        Destroy(hit.collider.gameObject);
-                    }
-
-                }
-
-            }
-            else
-            {
-                firePosition.LookAt(myCameraHead.position + (myCameraHead.forward * 50f));
-            }
-
-            Instantiate(muzzleFlash, firePosition.position, firePosition.rotation, firePosition);
-
-            Instantiate(bullet, firePosition.position, firePosition.rotation);
-        }
-    }
+    
 
     private void CameraMovement()
     {
